@@ -5,7 +5,7 @@ session_start();
 // Vérifiez si l'utilisateur est connecté
 if (isset($_SESSION['user'])) {
     $username = $_SESSION['user']['username'];
-
+    $userRole = $_SESSION['user']['role'];
 } else {
     header('Location: login.php');
     exit();
@@ -37,6 +37,26 @@ if (isset($_SESSION['user'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.4/tailwind.min.css">
 </head>
 <body class="bg-gray-200">
+<?php if ($userRole === 'admin') { ?>
+    <nav class="bg-blue-500 py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <button class="px-4 py-2 rounded-md bg-gray-700 text-white mr-2 hover:bg-gray-600" onclick="location.href='http://localhost/DEMANDE_ARTICLE.php'">Demande</button>
+                <button class="px-4 py-2 rounded-md bg-gray-700 text-white hover:bg-gray-600" onclick="location.href='http://localhost/Liste_Demande.php'">Liste</button>
+            </div>
+            <div class="flex items-center">
+                <h1 class="text-white font-bold mr-4"><?php echo $_SESSION['user']['username']; ?></h1>
+                <button class="p-1 text-gray-400 hover:text-gray-200" onclick="location.href='http://localhost/deconnexion.php'">
+                    <svg class="h-8 w-8 text-red-500" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z"/>
+                        <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+                        <path d="M7 12h14l-3 -3m0 6l3 -3" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+<?php } else { ?>
     <nav class="bg-blue-500 py-4">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center ml-auto">
@@ -51,6 +71,7 @@ if (isset($_SESSION['user'])) {
             </div>
         </div>
     </nav>
+<?php } ?>
    <div class="container mx-auto p-10">
    <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">DEMANDE D'ARTICLES</h1>
         <div id="form-filtre" class="mb-8">

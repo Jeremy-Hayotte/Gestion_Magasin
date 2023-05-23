@@ -27,6 +27,7 @@ function generateSelectFilter() {
         echo '<label for="categorie" class="mr-2 font-bold">Filtrer par catégorie :</label>';
         echo '<div class="relative">';
         echo '<select name="Categorie" id="Categorie" class="px-4 py-2 rounded-md bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">';
+        echo '<option value="" selected disabled>Choisir la catégorie</option>';
         foreach($results as $row) {
             echo '<option value="'.$row["Categorie"].'">'.$row["Categorie"].'</option>';
         }
