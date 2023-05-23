@@ -1,4 +1,19 @@
 <?php
+
+if (isset($_POST['form']) && $_POST['form'] === 'delete') {
+    $demandeId = $_POST['demandeId'];
+    try {
+        $db = new PDO('sqlite:C:\Users\Etudiant\Documents\MAGASIN.db');
+    } catch (PDOException $e) {
+        die("Erreur de connexion : " . $e->getMessage());
+    }
+    $sql = $db->prepare("UPDATE Demande SET Etat = 1 WHERE id = :demandeId");
+    $sql->bindParam(':demandeId', $demandeId);
+    $sql->execute();
+    header('Location: Liste_Demande.php');
+    exit();
+}
+
 function generateSelectFilter() {
     try {
         $db = new PDO('sqlite:C:\Users\Etudiant\Documents\MAGASIN.db');
@@ -27,4 +42,7 @@ function generateSelectFilter() {
         echo "<input type='hidden' name='selectedItems' value=''>";
     }
 }
+
+
+
 ?>

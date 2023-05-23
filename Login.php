@@ -8,7 +8,7 @@ if (isset($_POST['submit'])) {
     $password = $_POST['password'];
 
     // Connexion à la base de données
-    $pdo = new PDO('sqlite:/path/to/database.db');
+    $pdo = new PDO('sqlite:C:\Users\Etudiant\Documents\MAGASIN.db');
 
     // Requête pour récupérer l'utilisateur correspondant au nom d'utilisateur
     $stmt = $pdo->prepare("SELECT * FROM user WHERE username = ?");
@@ -20,12 +20,16 @@ if (isset($_POST['submit'])) {
         // Authentification réussie, stockage des informations de l'utilisateur en session
         $_SESSION['user'] = [
             'id' => $user['id'],
-            'username' => $user['username']
-            // Ajoutez ici toutes les informations que vous souhaitez stocker en session
+            'username' => $user['username'],
+            'role' => $user['role']
         ];
 
-        // Redirection vers la page d'accueil ou autre page protégée
-        header('Location: index.php');
+        // Redirection vers la page appropriée en fonction du rôle de l'utilisateur
+        if ($user['role'] == 'admin') {
+            header('Location: liste_demande.php');
+        } else {
+            header('Location: demande_article.php');
+        }
         exit();
     } else {
         // Authentification échouée, affichage d'un message d'erreur
@@ -57,7 +61,7 @@ if (isset($_POST['submit'])) {
 
             <form action="login.php" method="post">
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2" for="username">Nom d'utilisateur :</label>
+                    <label class="block text-gray-700 font-bold mb-2" for="username">Email:</label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="username" required>
                 </div>
                 <div class="mb-4">
