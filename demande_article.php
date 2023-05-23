@@ -24,14 +24,12 @@
     </nav>
    <div class="container mx-auto p-10">
    <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">DEMANDE D'ARTICLES</h1>
-        <form method="get" id="form-filtre" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="mb-8">
-            <div class="flex justify-center">
-                <div class="flex items-center mr-4">
-                    <?php generateSelectFilter();// Génére la liste des catégories dans le select pour le filtre?>
-                    <button type="submit" name="filtrer" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Filtrer</button>
-                </div>
+        <div class="flex justify-center">
+            <div class="flex items-center mr-4">
+                <?php generateSelectFilter();// Génére la liste des catégories dans le select pour le filtre?>
+                <button id="button-filtre" name="filtrer" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Filtrer</button>
             </div>
-        </form>
+        </div>
         <form method="post" action="Confirmation_Demande.php" id="form-confirmation">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">

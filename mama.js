@@ -1,19 +1,17 @@
 
-var url = 'http://localhost/getdata.php';
 var selectedItems = [];
 var filterCategorie = '';
-var lesTrucsCheck = [];
-var selecttablerows=[]
 
 const selecctarticle = document.getElementsByClassName("input-selection");
 const selectedItemsBefore = document.querySelector("input[name='selectedItems']").value;
 
 
 function tabcreate() {
-    console.log(filterCategorie);
+    let url = 'http://localhost/getdata.php';
     if (filterCategorie != '') {
-        url = url + "?categorie="+filterCategorie;
+        url += "?categorie="+filterCategorie;
     }
+    console.log(url);
     fetch(url)
         .then(response => response.json())
         .then(data => {
@@ -40,7 +38,6 @@ function tabcreate() {
       UNITE_DE_MESURE.innerText = article.Unitédemesure;
       CATEGORIE.innerText = article.Categorie
 
-      row.classList.add('mabelle')
       row.appendChild(CODESAP);
       row.appendChild(CODEPOLE);
       row.appendChild(DESCRIPTION);
@@ -50,11 +47,6 @@ function tabcreate() {
 
       tableBody.appendChild(row);
     });
-
-    for (let index = 0; index < lesTrucsCheck.length; index++) {
-        const element = lesTrucsCheck[index];
-        tableBody.appendChild(element);
-    }
     setEvent();
   })
   .catch(error => {
@@ -81,13 +73,11 @@ for (var i = 0; i < selecctarticle.length; i++) {
 
 
 // Executer quand le form filtre est envoyé
-document.querySelector("#form-filtre").addEventListener("submit", function(event) {
-    event.preventDefault();
-    selecttablerows = document.getElementsByClassName("jeleveux");
+document.querySelector("#button-filtre").addEventListener("click", () => {
     clearTable()
     filterCategorie = document.getElementById('Categorie').value || '';
-    for (let index = 0; index < selecttablerows.length; index++) {
-        const element = selecttablerows[index];
+    for (let index = 0; index < selectedItems.length; index++) {
+        const element = selectedItems[index];
         document.getElementById('table-body').appendChild(element);
     }
     tabcreate();
@@ -96,36 +86,38 @@ document.querySelector("#form-filtre").addEventListener("submit", function(event
 // Pareil mais pour le form valider
 document.querySelector("#form-confirmation").addEventListener("submit", function(event) {
     event.preventDefault();
-    let AddItems = document.querySelector("input[name='selectedItems']").value;
     // Dans le form valider
-    document.querySelector("input[name='articles']").value = JSON.stringify(JSON.stringify(selectedItems+AddItems));
+    let outputValue = '';
+    let first = true;
+    selectedItems.forEach(rowSelected => {
+        if(!first) {
+            outputValue += ',';
+        } else {
+            first = false;
+        }
+        // C'est le code SAP
+        outputValue += rowSelected.children[0].innerHTML;
+    });
+
+    document.querySelector("input[name='articles']").value = outputValue;
     this.submit();
 });
 
 
-
-
 function setEvent() {
     // evenement qui s'execute sur chaque ligne -> quand la checkbox change on ajoute une class
-    let elements = document.getElementsByClassName('mabelle');
-    console.log("dans setevent" + elements.length)
+    let elements = document.querySelectorAll('tr');
     for (let index = 0; index < elements.length; index++) {
         const element = elements[index];
         let childrenList = element.children;
         for (let index = 0; index < childrenList.length; index++) {
             const child = childrenList[index];
             if (child.getAttribute("class") == 'checkbox') {
-                console.log("2")
                 child.addEventListener('change', () => {
-                    console.log("3")
-                    if(lesTrucsCheck.indexOf(element) == -1){
-                        element.classList.add('jeleveux');
-                        lesTrucsCheck.push(element);
-                        console.log("4")
+                    if(selectedItems.indexOf(element) == -1){
+                        selectedItems.push(element);
                     }else{
-                        element.classList.remove('jeleveux');
-                        lesTrucsCheck.pop(element);
-                        console.log("5")
+                        selectedItems.pop(element);
                     }
                 })
             }
@@ -134,6 +126,3 @@ function setEvent() {
 }
 
 tabcreate();
-
-
-
